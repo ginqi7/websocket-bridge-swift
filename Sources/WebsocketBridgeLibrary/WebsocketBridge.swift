@@ -21,6 +21,7 @@ public class WebsocketBridge {
     var request = URLRequest(url: url)
     request.timeoutInterval = 5
     self.client = WebSocket(request: request)
+    self.client!.callbackQueue = DispatchQueue(label: "com.qiqijin.websocket-bridge.main")
     self.client!.onEvent = didReceive(event:)
     self.client!.connect()
   }
@@ -125,7 +126,7 @@ public class WebsocketBridge {
     var request = URLRequest(url: url)
     request.timeoutInterval = 5
     let socket: WebSocket = WebSocket(request: request)
-    socket.callbackQueue = DispatchQueue(label: "temp")
+    socket.callbackQueue = DispatchQueue(label: "com.qiqijin.websocket-bridge.temp")
     return socket
   }
 
