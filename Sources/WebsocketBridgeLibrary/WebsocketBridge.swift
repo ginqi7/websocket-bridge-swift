@@ -40,7 +40,14 @@ public class WebsocketBridge {
     var dict: [String: String] = [:]
     dict["type"] = "eval-code"
     dict["content"] = code
+    print(code)
     send(str: toJson(dict: dict))
+  }
+
+  public func runInEmacs(function: String, _ args: String...) {
+    let argsString = args.map { "\"\($0)\"" }.joined(separator: " ")
+    let code = "(\(function) \(argsString))"
+    evalInEmacs(code: code)
   }
 
   // TODO: current version just support String variable.

@@ -46,5 +46,8 @@
 
 (websocket-bridge-call "swift-demo" "value" "Hello")
 
+(websocket-bridge-call "swift-demo" "runInEmacs" "Hello")
+
+
 (provide 'websocket-bridge-swift)
 ;;; websocket-bridge-swift.el ends here

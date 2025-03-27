@@ -18,7 +18,8 @@ CLI.onMessage = { args in
     print(port)
     port = bridge.getEmacsVar(varName: "org-todo-keywords")
     print(port)
-
+  case "runInEmacs":
+    bridge.runInEmacs(function: "message", "hello", "World", "999")
   default:
     print(args)
   }
