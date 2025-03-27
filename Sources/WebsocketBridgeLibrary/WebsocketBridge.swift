@@ -45,29 +45,30 @@ public class WebsocketBridge {
 
   public func getEmacsVar(varName: String) -> String? {
     // TODO How to make tempClient to other process
-    let dict: [String: String] = [
-      "type": "fetch-var",
-      "content": varName,
-    ]
-    let tempClient = createTemporaryWebSocket()
-    var varValue: String? = nil
-    tempClient.onEvent = { event in
-      switch event {
-      case .connected(_):
-        tempClient.write(string: self.toJson(dict: dict))
-        break
-      case .text(let string):
-        print(string)
-        varValue = string
-        semaphore.signal()
-        tempClient.disconnect()
-        break
-      default:
-        break
-      }
-    }
-    tempClient.connect()
-    return varValue
+    // let dict: [String: String] = [
+    //   "type": "fetch-var",
+    //   "content": varName,
+    // ]
+    // let tempClient = createTemporaryWebSocket()
+    // var varValue: String? = nil
+    // tempClient.onEvent = { event in
+    //   switch event {
+    //   case .connected(_):
+    //     tempClient.write(string: self.toJson(dict: dict))
+    //     break
+    //   case .text(let string):
+    //     print(string)
+    //     varValue = string
+    //     semaphore.signal()
+    //     tempClient.disconnect()
+    //     break
+    //   default:
+    //     break
+    //   }
+    // }
+    // tempClient.connect()
+    // return varValue
+    return nil
   }
 
   // MARK: - Private Methods
