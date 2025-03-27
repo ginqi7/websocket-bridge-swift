@@ -43,34 +43,42 @@ public class WebsocketBridge {
     send(str: toJson(dict: dict))
   }
 
+  // TODO: current version just support String variable.
   public func getEmacsVar(varName: String) -> String? {
-    // TODO How to make tempClient to other process
-    // let dict: [String: String] = [
-    //   "type": "fetch-var",
-    //   "content": varName,
-    // ]
-    // let tempClient = createTemporaryWebSocket()
-    // var varValue: String? = nil
-    // tempClient.onEvent = { event in
-    //   switch event {
-    //   case .connected(_):
-    //     tempClient.write(string: self.toJson(dict: dict))
-    //     break
-    //   case .text(let string):
-    //     print(string)
-    //     varValue = string
-    //     semaphore.signal()
-    //     tempClient.disconnect()
-    //     break
-    //   default:
-    //     break
-    //   }
-    // }
-    // tempClient.connect()
-    // return varValue
-    return nil
+    let dict: [String: String] = [
+      "type": "fetch-var",
+      "content": varName,
+    ]
+    var value: String? = nil
+    let tempClient = createTemporaryWebSocket()
+    let semaphore = DispatchSemaphore(value: 0)
+    tempClient.onEvent = { event in
+      switch event {
+      case .connected(_):
+        tempClient.write(string: self.toJson(dict: dict))
+        break
+      case .text(let string):
+        value = string
+        tempClient.disconnect()
+        semaphore.signal()
+        break
+      default:
+        break
+      }
+    }
+    tempClient.connect()
+    semaphore.wait()
+    do {
+      if let value = value,
+        let data = value.data(using: String.Encoding.utf8)
+      {
+        return try JSONDecoder().decode(String.self, from: data)
+      }
+    } catch {
+      print("JSON Decoding Error: \(error)")
+    }
+    return value
   }
-
   // MARK: - Private Methods
 
   private func didReceive(event: WebSocketEvent) {
@@ -109,7 +117,9 @@ public class WebsocketBridge {
     let url = URL(string: "http://127.0.0.1:\(serverPort!)")!
     var request = URLRequest(url: url)
     request.timeoutInterval = 5
-    return WebSocket(request: request)
+    let socket: WebSocket = WebSocket(request: request)
+    socket.callbackQueue = DispatchQueue(label: "temp")
+    return socket
   }
 
   private func jsonToArray(str: String) -> [Any] {

@@ -1,4 +1,5 @@
 import Darwin
+import Foundation
 import WebsocketBridgeLibrary
 
 let CLI = WebsocketBridgeCommand()
@@ -10,8 +11,14 @@ CLI.onMessage = { args in
     bridge.messageToEmacs(message: args[1])
   case "value":
     print(args)
-    let port = bridge.getEmacsVar(varName: "websocket-bridge-server-port")
-  // print(port!)
+    var port: String? = nil
+    port = bridge.getEmacsVar(varName: "websocket-bridge-server-port")
+    print(port)
+    port = bridge.getEmacsVar(varName: "org-reminders-sync-file")
+    print(port)
+    port = bridge.getEmacsVar(varName: "org-todo-keywords")
+    print(port)
+
   default:
     print(args)
   }

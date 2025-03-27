@@ -25,7 +25,7 @@
 ;;; Code:
 
 (defvar swift-command
-  (expand-file-name "Some Path"))
+  (expand-file-name "../../.build/arm64-apple-macosx/debug/websocket-bridge-swift-demo"))
 
 (defun swift-demo-start ()
   "Start websocket bridge real-time-translation."
