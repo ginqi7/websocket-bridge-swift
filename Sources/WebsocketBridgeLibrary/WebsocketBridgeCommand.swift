@@ -1,5 +1,4 @@
 import Foundation
-import WebsocketBridgeLibrary
 
 public class WebsocketBridgeCommand {
   public var onMessage: (([String]) -> Void)? = nil

@@ -19,7 +19,7 @@ let package = Package(
       dependencies: [
         .product(name: "Starscream", package: "Starscream")
       ]),
-    .target(
+    .executableTarget(
       name: "WebsocketBridgeDemo",
       dependencies: [
         "WebsocketBridgeLibrary"
