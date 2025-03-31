@@ -51,8 +51,33 @@ public class WebsocketBridge {
     evalInEmacs(code: code)
   }
 
-  // TODO: current version just support String variable.
   public func getEmacsVar(varName: String) -> String? {
+    if let json = getEmacsVarJson(varName: varName) {
+      do {
+        if let data = json.data(using: String.Encoding.utf8) {
+          return try JSONDecoder().decode(String.self, from: data)
+        }
+      } catch let error {
+        print("Error: \(error)")
+      }
+    }
+    return nil
+  }
+
+  public func getEmacsVar(varName: String, example: Int) -> Int? {
+    if let json = getEmacsVarJson(varName: varName) {
+      do {
+        if let data = json.data(using: String.Encoding.utf8) {
+          return try JSONDecoder().decode(Int.self, from: data)
+        }
+      } catch let error {
+        print("Error: \(error)")
+      }
+    }
+    return nil
+  }
+
+  public func getEmacsVarJson(varName: String) -> String? {
     let dict: [String: String] = [
       "type": "fetch-var",
       "content": varName,
@@ -76,15 +101,6 @@ public class WebsocketBridge {
     }
     tempClient.connect()
     semaphore.wait()
-    do {
-      if let value = value,
-        let data = value.data(using: String.Encoding.utf8)
-      {
-        return try JSONDecoder().decode(String.self, from: data)
-      }
-    } catch {
-      print("JSON Decoding Error: \(error)")
-    }
     return value
   }
   // MARK: - Private Methods

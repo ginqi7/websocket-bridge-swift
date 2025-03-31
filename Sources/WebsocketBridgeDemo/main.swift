@@ -11,13 +11,10 @@ CLI.onMessage = { args in
     bridge.messageToEmacs(message: args[1])
   case "value":
     print(args)
-    var port: String? = nil
-    port = bridge.getEmacsVar(varName: "websocket-bridge-server-port")
-    print(port)
-    port = bridge.getEmacsVar(varName: "org-reminders-sync-file")
-    print(port)
-    port = bridge.getEmacsVar(varName: "org-todo-keywords")
-    print(port)
+    print(bridge.getEmacsVar(varName: "websocket-bridge-server-port") ?? "Not found")
+    print(bridge.getEmacsVar(varName: "org-reminders-sync-file") ?? "Not found")
+    print(bridge.getEmacsVar(varName: "org-reminders-sync-frequency", example: 0) ?? 0)
+
   case "runInEmacs":
     bridge.runInEmacs(function: "message", "hello", "World", "999")
   default:
