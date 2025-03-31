@@ -52,29 +52,34 @@ public class WebsocketBridge {
   }
 
   public func getEmacsVar(varName: String) -> String? {
+    var value: String? = nil
     if let json = getEmacsVarJson(varName: varName) {
       do {
         if let data = json.data(using: String.Encoding.utf8) {
-          return try JSONDecoder().decode(String.self, from: data)
+          value = try JSONDecoder().decode(String.self, from: data)
         }
       } catch let error {
         print("Error: \(error)")
       }
     }
-    return nil
+    print("Variable [\(varName)] is \(value ?? "nil") in Emacs.")
+    return value
   }
 
   public func getEmacsVar(varName: String, example: Int) -> Int? {
+    var value: Int? = nil
     if let json = getEmacsVarJson(varName: varName) {
       do {
         if let data = json.data(using: String.Encoding.utf8) {
-          return try JSONDecoder().decode(Int.self, from: data)
+          value = try JSONDecoder().decode(Int.self, from: data)
         }
       } catch let error {
         print("Error: \(error)")
       }
     }
-    return nil
+    let valueStr = String(describing: value)
+    print("Variable [\(varName)] is \(valueStr) in Emacs.")
+    return value
   }
 
   public func getEmacsVarJson(varName: String) -> String? {
